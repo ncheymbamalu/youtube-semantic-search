@@ -72,8 +72,8 @@ def etl(youtube_channel_id: str, max_results: int = 50) -> pl.LazyFrame:
             pl.LazyFrame(video_records)
             .with_columns(
                 pl.col("datetime").cast(pl.Datetime),
-                pl.col("title").str.replace_many(["&#39;", "&amp;"], ["'", "&"]),
-                pl.col("transcript").str.replace_many(["&#39;", "&amp;"], ["'", "&"])
+                pl.col("title").str.replace_many(["&#39;", "&amp;", "  "], ["'", "&", " "]),
+                pl.col("transcript").str.replace_many(["&#39;", "&amp;", "  "], ["'", "&", " "])
             )
             .unique(subset="video_id")
             .sort(by="datetime")
