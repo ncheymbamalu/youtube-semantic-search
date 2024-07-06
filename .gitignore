@@ -131,3 +131,5 @@ dmypy.json
 # additional items to ignore
 .idea
 .DS_Store
+/data/*
+/artifacts/*
