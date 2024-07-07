@@ -1,0 +1,5 @@
+fastapi==0.111.0
+numpy==1.26.4
+polars-lts-cpu==0.20.31
+scikit-learn==1.2.2
+sentence-transformers==2.6.1
