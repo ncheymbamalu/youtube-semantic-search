@@ -61,7 +61,7 @@ def get_indices(query: str, k: int = 5) -> list[int]:
 
 
 def answer_query(query: str) -> None:
-    """Prints out the title and url of the five YouTube videos whose transcript 
+    """Prints out the title and url of the five YouTube videos whose transcript
     has the strongest contextual relationship with the input query
 
     Args:
@@ -69,9 +69,7 @@ def answer_query(query: str) -> None:
     """
     idx: list[int] = get_indices(query)
     titles: list[str] = latest_data[idx, "title"].to_list()
-    urls: list[str] = [
-        f"https://youtu.be/{video_id}" for video_id in latest_data[idx, "video_id"]
-    ]
+    urls: list[str] = [f"https://youtu.be/{video_id}" for video_id in latest_data[idx, "video_id"]]
     results: list[str] = "\n".join(
         f"{i+1}. {title}: {url}" for i, (title, url) in enumerate(zip(titles, urls))
     )

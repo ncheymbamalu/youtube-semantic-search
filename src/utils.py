@@ -1,8 +1,8 @@
 import json
 import os
+
 import pandas as pd
 import polars as pl
-
 import requests
 
 from dotenv import load_dotenv
@@ -64,13 +64,10 @@ def transcribe_videos(youtube_channel_id: str, max_results: int = 50) -> pl.Lazy
                 )
         unusual_strings: list[str] = ["&#39;", "&quot;", "&amp;", "  "]
         correct_strings: list[str] = ["'", "'", "&", " "]
-        return (
-            pl.LazyFrame(records)
-            .with_columns(
-                pl.col("creation_date").str.to_datetime(),
-                pl.col("title").str.replace_many(unusual_strings, correct_strings),
-                pl.col("transcript").str.replace_many(unusual_strings, correct_strings),
-            )
+        return pl.LazyFrame(records).with_columns(
+            pl.col("creation_date").str.to_datetime(),
+            pl.col("title").str.replace_many(unusual_strings, correct_strings),
+            pl.col("transcript").str.replace_many(unusual_strings, correct_strings),
         )
     except Exception as e:
         raise e

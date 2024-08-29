@@ -3,7 +3,6 @@ from fastapi import FastAPI
 from src.etl import latest_data
 from src.semantic_search import get_indices
 
-
 # create the 'FastAPI' instance
 app: FastAPI = FastAPI(title="YouTube Search API")
 

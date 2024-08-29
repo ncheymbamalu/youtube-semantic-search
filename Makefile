@@ -8,7 +8,6 @@ etl:
 backend:
 	uvicorn src.app:app --reload
 
-
 # Gradio application
 frontend:
 	poetry run python src/frontend.py

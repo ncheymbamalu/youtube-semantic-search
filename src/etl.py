@@ -63,20 +63,19 @@ def etl(youtube_channel_ids: list[str], embedding_model_id: str) -> None:
                     (
                         latest_data,
                         (
-                            df
-                            .pipe(embed_transcripts, embedding_model)
+                            df.pipe(embed_transcripts, embedding_model)
                             .with_columns(pl.col("creation_date").str.to_datetime())
                             .select(latest_data.columns)
-                        )
+                        ),
                     ),
-                    how="vertical"
+                    how="vertical",
                 )
                 .sort(by="creation_date")
                 .write_parquet(PathConfig.PROCESSED_DATA_PATH)
             )
             logging.info(
                 "Finished! '%s' has been updated with the new YouTube video transcripts.",
-                PathConfig.PROCESSED_DATA_PATH
+                PathConfig.PROCESSED_DATA_PATH,
             )
     except Exception as e:
         raise e
