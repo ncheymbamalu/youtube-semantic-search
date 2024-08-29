@@ -134,5 +134,5 @@ dmypy.json
 *.idea
 *.DS_Store
 /.gdrive
-/log
+/logs
 /artifacts
