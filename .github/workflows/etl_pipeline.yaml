@@ -44,18 +44,22 @@ jobs:
       - name: Install DVC
         uses: iterative/setup-dvc@v1
 
-      - name: Create DVC config file
+      - name: Pull data from remote storage
         env:
           GDRIVE_CREDENTIALS_DATA: ${{ secrets.GDRIVE_CREDENTIALS_DATA }}
-        run: sudo bash -c 'base64 --decode <<< "$GDRIVE_CREDENTIALS_DATA" > dvc-creds.json'
-
-      - name: Configure DVC with remote storage
         run: |
+          sudo bash -c 'base64 --decode <<< "$GDRIVE_CREDENTIALS_DATA" > dvc-creds.json'
           dvc remote modify gdrive --local gdrive_use_service_account true
           dvc remote modify gdrive --local gdrive_service_account_json_file_path ./dvc-creds.json
+          dvc pull
 
-      - name: Pull data from remote storage
-        run: dvc pull
+      # - name: Configure DVC with remote storage
+      #   run: |
+      #     dvc remote modify gdrive --local gdrive_use_service_account true
+      #     dvc remote modify gdrive --local gdrive_service_account_json_file_path ./dvc-creds.json
+
+      # - name: Pull data from remote storage
+      #   run: dvc pull
 
       - name: Execute pipeline
         env:
