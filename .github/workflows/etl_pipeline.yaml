@@ -45,10 +45,9 @@ jobs:
         uses: iterative/setup-dvc@v1
 
       - name: Create DVC config file
-      - shell: bash
         env:
           GDRIVE_CREDENTIALS_DATA: ${{ secrets.GDRIVE_CREDENTIALS_DATA }}
-        run: echo "$GDRIVE_CREDENTIALS_DATA" | base64 -d > dvc-creds.json
+        run: echo "$GDRIVE_CREDENTIALS_DATA" | base64 -d >> dvc-creds.json
 
       - name: Configure DVC with remote storage
         run: |
