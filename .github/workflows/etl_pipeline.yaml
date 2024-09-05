@@ -11,7 +11,6 @@ on:
 env:
   POETRY_URL: https://install.python-poetry.org
   POETRY_VERSION: 1.8.3
-  GDRIVE_CREDENTIALS_DATA: ${{ secrets.GDRIVE_CREDENTIALS_DATA }}
 
 jobs:
   etl_pipeline:
@@ -45,15 +44,18 @@ jobs:
       - name: Install DVC
         uses: iterative/setup-dvc@v1
 
+      - name: Create DVC config file
+        env:
+          GDRIVE_CREDENTIALS_DATA: ${{ secrets.GDRIVE_CREDENTIALS_DATA }}
+        run: echo "$GDRIVE_CREDENTIALS_DATA" | base64 -d > dvc-creds.json
+
       - name: Configure DVC with remote storage
         run: |
-          base64 -d <<< "${{ env.GDRIVE_CREDENTIALS_DATA }}" > dvc-creds.json
           dvc remote modify gdrive --local gdrive_use_service_account true
           dvc remote modify gdrive --local gdrive_service_account_json_file_path ./dvc-creds.json
 
       - name: Pull data from remote storage
-        run: |
-          dvc pull
+        run: dvc pull
 
       - name: Execute pipeline
         env:
