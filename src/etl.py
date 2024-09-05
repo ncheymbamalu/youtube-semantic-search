@@ -48,7 +48,7 @@ def etl(youtube_channel_ids: list[str], embedding_model_id: str) -> None:
             # get the embedding model
             logging.info("Loading the '%s' text embedding model.", embedding_model_id)
             embedding_model: SentenceTransformer = SentenceTransformer(
-                embedding_model_id, trust_remote_code=True
+                model_name_or_path=embedding_model_id, trust_remote_code=True
             )
 
             # generate serialized embeddings for the new records, ...

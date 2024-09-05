@@ -70,7 +70,7 @@ def answer_query(query: str) -> None:
     idx: list[int] = get_indices(query)
     titles: list[str] = latest_data[idx, "title"].to_list()
     urls: list[str] = [f"https://youtu.be/{video_id}" for video_id in latest_data[idx, "video_id"]]
-    results: list[str] = "\n".join(
+    results: str = "\n".join(
         f"{i+1}. {title}: {url}" for i, (title, url) in enumerate(zip(titles, urls))
     )
     print(f"Query: {query}\n\nYouTube Results:\n{results}")
