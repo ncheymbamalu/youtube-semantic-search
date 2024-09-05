@@ -11,8 +11,7 @@ on:
 env:
   POETRY_URL: https://install.python-poetry.org
   POETRY_VERSION: 1.8.3
-  # remote storage, which is arbitrarily named by the user
-  REMOTE: gdrive
+  BASE64: ${{ secrets.BASE64_GDRIVE_CREDENTIALS_DATA }}
 
 jobs:
   etl_pipeline:
@@ -47,13 +46,12 @@ jobs:
         uses: iterative/setup-dvc@v1
 
       - name: Pull data from remote storage
+        # 'gdrive' is the name of the remote Google Drive storage where the data resides
         run: |
-          touch test.json
-          dvc remote modify ${{ env.REMOTE }} --local gdrive_use_service_account true
-          dvc remote modify ${{ env.REMOTE }} --local gdrive_service_account_json_file_path ./test.json
+          base64 -d <<< "${{ env.BASE64 }}" > dvc-creds.json
+          dvc remote modify gdrive --local gdrive_use_service_account true
+          dvc remote modify gdrive --local gdrive_service_account_json_file_path /dvc-creds.json
           dvc pull
-        env:
-          GDRIVE_CREDENTIALS_DATA: ${{ secrets.GDRIVE_CREDENTIALS_DATA }}
 
       - name: Execute pipeline
         env:
