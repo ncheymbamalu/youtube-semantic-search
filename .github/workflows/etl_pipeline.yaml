@@ -50,7 +50,7 @@ jobs:
           GDRIVE_STORAGE_URI: ${{ secrets.GDRIVE_STORAGE_URI }}
         run: |
           sudo bash -c 'base64 --decode <<< "$GDRIVE_CREDENTIALS_DATA" > dvc-creds.json'
-          dvc remote add -d gdrive $GDRIVE_STORAGE_URI
+          dvc remote add -d -f gdrive $GDRIVE_STORAGE_URI
           dvc remote modify gdrive --local gdrive_use_service_account true
           dvc remote modify gdrive --local gdrive_service_account_json_file_path ./dvc-creds.json
           dvc pull
