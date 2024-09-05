@@ -1,3 +1,5 @@
+import os
+
 import polars as pl
 
 from dotenv import load_dotenv
@@ -47,8 +49,11 @@ def etl(youtube_channel_ids: list[str], embedding_model_id: str) -> None:
         else:
             # get the embedding model
             logging.info("Loading the '%s' text embedding model.", embedding_model_id)
-            embedding_model: SentenceTransformer = SentenceTransformer(
-                model_name_or_path=embedding_model_id, trust_remote_code=True
+            embedding_model: SentenceTransformer = (
+                SentenceTransformer(
+                    str(PathConfig.ARTIFACTS_DIR / "embedding_model"), trust_remote_code=True
+                ) if os.path.exists(PathConfig.ARTIFACTS_DIR / "embedding_model")
+                else SentenceTransformer(embedding_model_id, trust_remote_code=True)
             )
 
             # generate serialized embeddings for the new records, ...

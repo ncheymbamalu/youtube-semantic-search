@@ -7,6 +7,7 @@ from omegaconf import OmegaConf
 class PathConfig:
     PROJECT_DIR: PosixPath = Path(__file__).parent.parent.absolute()
     DATA_DIR: PosixPath = PROJECT_DIR / "data"
+    ARTIFACTS_DIR: PosixPath = PROJECT_DIR / "artifacts"
     PROCESSED_DATA_PATH: PosixPath = DATA_DIR / "youtube_transcripts.parquet"
     YOUTUBE_DATA_API: str = "https://www.googleapis.com/youtube/v3/search"
 
