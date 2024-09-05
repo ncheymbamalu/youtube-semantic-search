@@ -43,20 +43,19 @@ jobs:
       - name: Install dependencies
         run: poetry install
 
-      - name: Set up DVC
+      - name: Install DVC
         uses: iterative/setup-dvc@v1
 
-      - name: Configure DVC with Google Drive
+      - name: Configure DVC with remote storage
         run: |
           touch test.json
-          dvc init
           dvc remote add -d ${{ env.REMOTE }} gdrive://root
           dvc remote modify ${{ env.REMOTE }} --local gdrive_use_service_account true
           dvc remote modify ${{ env.REMOTE }} --local gdrive_service_account_json_file_path ./test.json
         env:
           GDRIVE_CREDENTIALS_DATA: ${{ secrets.GDRIVE_CREDENTIALS_DATA }}
 
-      - name: Pull data with DVC
+      - name: Pull data from remote storage
         run: |
           dvc pull
 
@@ -67,7 +66,7 @@ jobs:
           TOKENIZERS_PARALLELISM: ${{ secrets.TOKENIZERS_PARALLELISM }}
         run: make etl
 
-      - name: Push data to remote
+      - name: Push data to remote storage
         run: |
           dvc add ./data
           git config user.name 'github-actions'
