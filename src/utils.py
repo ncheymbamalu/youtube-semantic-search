@@ -108,9 +108,9 @@ def chunk_text(document: str, tokenizer: BertTokenizerFast, token_overlap: int =
 
 def embed_transcripts(data: pl.DataFrame, model: SentenceTransformer) -> pl.DataFrame:
     """Generates serialized embeddings, i.e., bytes, for each record's transcripts.
-    NOTE: a single transcript may have more than one embedding vector, if its context
-    length (number of tokens) is greater that the embedding model's tokenizer's context
-    length.
+    NOTE: if a single transcript's context length (number of tokens) is greater than
+    the embedding model's tokenizer's context length, it will be mapped to more than
+    one embedding vector.
 
     Args:
         data (pl.DataFrame): Dataset containing the video ID, creation date, title, and
