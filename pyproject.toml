@@ -33,6 +33,7 @@ uvicorn = "0.30.6"
 watchdog = "4.0.2"
 youtube-transcript-api = "0.6.2"
 
+
 [tool.poetry.group.dev.dependencies]
 black = "24.8.0"
 Flake8-pyproject = "1.2.3"
@@ -40,6 +41,7 @@ isort = "5.13.2"
 mypy = "1.11.1"
 pylint = "3.2.6"
 pytest = "8.3.2"
+ruff = "^0.7.0"
 
 [tool.black]
 line-length = 100
@@ -87,6 +89,10 @@ disallow_untyped_decorators = true
 check_untyped_defs = true
 strict_optional = true
 verbosity = 0
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
 
 [build-system]
 requires = ["poetry-core"]

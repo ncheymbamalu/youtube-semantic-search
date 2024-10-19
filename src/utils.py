@@ -44,7 +44,7 @@ def transcribe_videos(youtube_channel_id: str, max_results: int = 50) -> pl.Lazy
         records: list[dict[str, str]] = []
         for item in json.loads(response.text).get("items"):
             try:
-                record: dict[str, str] = {
+                record: dict[str, None | str] = {
                     "video_id": item.get("id").get("videoId"),
                     "creation_date": item.get("snippet").get("publishedAt"),
                     "title": item.get("snippet").get("title").strip(),
@@ -56,18 +56,28 @@ def transcribe_videos(youtube_channel_id: str, max_results: int = 50) -> pl.Lazy
                         if transcript_dict.get("text")
                     ),
                 }
-                records.append(record)
-            except:
+            except Exception:
                 logging.info(
-                    "The video titled, '%s', doesn't have a transcript.",
+                    "The video titled, '%s', doesn't have a transcript, and will be removed.",
                     item.get("snippet").get("title"),
                 )
+                record = {
+                    "video_id": item.get("id").get("videoId"),
+                    "creation_date": item.get("snippet").get("publishedAt"),
+                    "title": item.get("snippet").get("title").strip(),
+                    "transcript": None,
+                }
+            records.append(record)
         unusual_strings: list[str] = ["&#39;", "&quot;", "&amp;", "  "]
         correct_strings: list[str] = ["'", "'", "&", " "]
-        return pl.LazyFrame(records).with_columns(
-            pl.col("creation_date").str.to_datetime(),
-            pl.col("title").str.replace_many(unusual_strings, correct_strings),
-            pl.col("transcript").str.replace_many(unusual_strings, correct_strings),
+        return (
+            pl.LazyFrame(records)
+            .with_columns(
+                pl.col("creation_date").str.to_datetime(),
+                pl.col("title").str.replace_many(unusual_strings, correct_strings),
+                pl.col("transcript").str.replace_many(unusual_strings, correct_strings),
+            )
+            .drop_nulls(subset="transcript")
         )
     except Exception as e:
         raise e
