@@ -130,10 +130,9 @@ dmypy.json
 
 # additional items to ignore
 # NOTE: '/data' was added by dvc
-.gitignore
+/data
 *.idea
 *.DS_Store
 /.gdrive
-/data
 /artifacts
 /logs
